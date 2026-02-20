@@ -53,7 +53,7 @@ Then open **http://localhost:3000** (or the URL shown in the terminal). No envir
 npm run build
 ```
 
-Output is in `dist/`. Serve that folder with any static host (e.g. Nginx, Netlify, Vercel). For PWA “Add to Home Screen”, serve over HTTPS and ensure `/manifest.json` and the icons under `/icons/` are reachable.
+Output is in `dist/`. Serve that folder with any static host (e.g. Nginx, Netlify, Vercel). For PWA “Add to Home Screen”, serve over HTTPS and ensure `manifest.json` and the icons under `icons/` are reachable.
 
 ### 4. Use the app
 
