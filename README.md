@@ -1,5 +1,7 @@
 # Nostr Relay Center
 
+![Dashboard](docs/dashboard.png)
+
 A Progressive Web App (PWA) to manage a Nostr relay: connect via WebSocket, view NIP-11 metadata (fees, posting policy, relay countries), optional NIP-45 event count and recent activity, and manage a whitelist by publishing signed Kind 25000 events. **Authentication:** NSEC with PIN-protected encryption (Web Crypto API) in the browser, or **Nostr Bunker (NIP-46)** for remote signing. Layout: latency and connection-duration charts at the top, then statistics and relay overview, session and log out at the bottom. Minimal UI with light/dark theme.
 
 ## Requirements
