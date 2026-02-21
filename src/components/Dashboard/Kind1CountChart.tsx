@@ -28,7 +28,16 @@ export default function Kind1CountChart() {
   return (
     <article className="flex flex-col gap-2 p-4 rounded-lg bg-[var(--bg)] border border-[var(--border)] w-full">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-[var(--text-muted)]">Kind 1 activity (last 10 min, no NIP-45)</span>
+        <span className="text-xs font-medium text-[var(--text-muted)] flex items-center gap-1">
+          Kind 1 activity
+          <span
+            className="inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border border-current text-[10px] font-serif italic leading-none text-[var(--text-muted)]"
+            title="last 10 min, no NIP-45"
+            aria-label="Info: last 10 min, no NIP-45"
+          >
+            i
+          </span>
+        </span>
         <span className="text-sm font-mono text-[var(--text)]">{totalLastMinute} in 10 min · {lastSecond}/s</span>
       </div>
       <svg

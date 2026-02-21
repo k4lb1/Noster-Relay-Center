@@ -1,6 +1,7 @@
 import { useRelay } from '../../hooks/useRelay'
 import ConnectionsList from './ConnectionsList'
 import ConnectionDurationChart from './ConnectionDurationChart'
+import ErrorConsole from './ErrorConsole'
 import Kind1CountChart from './Kind1CountChart'
 import RelayLatencyChart from './RelayLatencyChart'
 import RelayMetadata from '../Relay/RelayMetadata'
@@ -25,6 +26,8 @@ export default function AdminDashboard() {
           </p>
         )}
       </section>
+
+      <ErrorConsole />
 
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <RelayStats />

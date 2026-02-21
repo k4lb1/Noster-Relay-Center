@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
+import { useLog } from '../../contexts/LogContext'
 import { useRelay } from '../../hooks/useRelay'
 import { useNIP11 } from '../../hooks/useNIP11'
 import { nip19 } from 'nostr-tools'
@@ -14,6 +15,7 @@ function relaySupportsNip25000(software: string | undefined): boolean {
 
 export default function WhitelistManager() {
   const { isAuthenticated, pubkey: authPubkey, signEvent } = useAuth()
+  const { addLog } = useLog()
   const { isConnected, sendRelayEvent, url: relayUrl } = useRelay()
   const { metadata, loading: nip11Loading } = useNIP11()
   const [pubkeys, setPubkeys] = useState<string[]>([''])
@@ -64,12 +66,16 @@ export default function WhitelistManager() {
     setSuccess(false)
 
     if (!isAuthenticated || !authPubkey) {
-      setError('Not authenticated')
+      const msg = 'Not authenticated'
+      setError(msg)
+      addLog('error', msg, 'Whitelist')
       return
     }
 
     if (!isConnected) {
-      setError('Not connected to relay')
+      const msg = 'Not connected to relay'
+      setError(msg)
+      addLog('error', msg, 'Whitelist')
       return
     }
 
@@ -78,7 +84,9 @@ export default function WhitelistManager() {
       .filter((pk): pk is string => pk !== null)
 
     if (!allowAll && normalizedPubkeys.length === 0) {
-      setError('At least one valid pubkey required or enable "Allow all"')
+      const msg = 'At least one valid pubkey required or enable "Allow all"'
+      setError(msg)
+      addLog('error', msg, 'Whitelist')
       return
     }
 
@@ -105,7 +113,9 @@ export default function WhitelistManager() {
       
       setTimeout(() => setSuccess(false), 5000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to send event')
+      const message = err instanceof Error ? err.message : 'Failed to send event'
+      setError(message)
+      addLog('error', message, 'Whitelist')
     } finally {
       setLoading(false)
     }

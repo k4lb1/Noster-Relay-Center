@@ -25,7 +25,16 @@ export default function RelayLatencyChart() {
   return (
     <article className="flex flex-col gap-2 p-4 rounded-lg bg-[var(--bg)] border border-[var(--border)] w-full">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-[var(--text-muted)]">Ping (last 10 min)</span>
+        <span className="text-xs font-medium text-[var(--text-muted)] flex items-center gap-1">
+          Ping
+          <span
+            className="inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border border-current text-[10px] font-serif italic leading-none text-[var(--text-muted)]"
+            title="last 10 min"
+            aria-label="Info: last 10 min"
+          >
+            i
+          </span>
+        </span>
         <span className="text-sm font-mono text-[var(--text)]">{lastMs} ms</span>
       </div>
       <svg

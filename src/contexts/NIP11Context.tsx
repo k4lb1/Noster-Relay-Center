@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import { useRelay } from '../hooks/useRelay'
 import type { NIP11Metadata } from '../types/nostr'
+import { useLog } from './LogContext'
 
 export interface NIP11ContextType {
   metadata: NIP11Metadata | null
@@ -37,13 +38,16 @@ async function fetchNIP11Metadata(relayUrl: string): Promise<NIP11Metadata> {
 
 export function NIP11Provider({ children }: { children: React.ReactNode }) {
   const { url: relayUrl } = useRelay()
+  const { addLog } = useLog()
   const [metadata, setMetadata] = useState<NIP11Metadata | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const fetchMetadata = useCallback(async (relayUrlParam: string) => {
     if (!relayUrlParam.trim()) {
-      setError('Relay URL is required')
+      const msg = 'Relay URL is required'
+      setError(msg)
+      addLog('error', msg, 'NIP-11')
       return
     }
     setLoading(true)
@@ -53,15 +57,18 @@ export function NIP11Provider({ children }: { children: React.ReactNode }) {
       setMetadata(data)
     } catch (err) {
       setMetadata(null)
-      if (err instanceof Error) {
-        setError(err.name === 'AbortError' ? 'Timeout fetching metadata' : err.message)
-      } else {
-        setError('Error fetching metadata')
-      }
+      const message =
+        err instanceof Error
+          ? err.name === 'AbortError'
+            ? 'Timeout fetching metadata'
+            : err.message
+          : 'Error fetching metadata'
+      setError(message)
+      addLog('error', message, 'NIP-11')
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [addLog])
 
   useEffect(() => {
     if (relayUrl === null) {

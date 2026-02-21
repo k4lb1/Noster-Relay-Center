@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
+import { useLog } from '../../contexts/LogContext'
 
 export default function NSECAuth() {
   const { isAuthenticated, hasStoredNSEC, setupNSEC, login, connectNIP46 } = useAuth()
+  const { addLog } = useLog()
   const [nsec, setNsec] = useState('')
   const [pin, setPin] = useState('')
   const [bunkerUrl, setBunkerUrl] = useState('')
@@ -29,7 +31,9 @@ export default function NSECAuth() {
       setPin('')
       setIsSetup(false)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
+      const message = err instanceof Error ? err.message : 'An error occurred'
+      setError(message)
+      addLog('error', message, 'Auth')
     } finally {
       setLoading(false)
     }
@@ -46,7 +50,9 @@ export default function NSECAuth() {
       await login(pin)
       setPin('')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
+      const message = err instanceof Error ? err.message : 'An error occurred'
+      setError(message)
+      addLog('error', message, 'Auth')
     } finally {
       setLoading(false)
     }
@@ -61,7 +67,9 @@ export default function NSECAuth() {
       await connectNIP46(bunkerUrl.trim())
       setBunkerUrl('')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to connect to Bunker')
+      const message = err instanceof Error ? err.message : 'Failed to connect to Bunker'
+      setError(message)
+      addLog('error', message, 'Auth')
     } finally {
       setBunkerLoading(false)
     }

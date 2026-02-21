@@ -1,8 +1,10 @@
 import { AuthProvider } from './contexts/AuthContext'
+import { LogProvider } from './contexts/LogContext'
 import { NIP11Provider } from './contexts/NIP11Context'
 import { RelayProvider } from './contexts/RelayContext'
 import { useAuth } from './contexts/AuthContext'
 import AppHeader from './components/AppHeader'
+import AppFooter from './components/AppFooter'
 import NSECAuth from './components/Auth/NSECAuth'
 import RelayConnection from './components/Relay/RelayConnection'
 import AdminDashboard from './components/Dashboard/AdminDashboard'
@@ -32,6 +34,7 @@ function AppContent() {
   const { isAuthenticated } = useAuth()
 
   return (
+    <>
     <main className="min-h-screen bg-[var(--bg)] pt-24 pb-12">
       <AppHeader />
       <section className="max-w-2xl mx-auto px-6 flex flex-col gap-6">
@@ -46,18 +49,22 @@ function AppContent() {
         )}
       </section>
     </main>
+    <AppFooter />
+    </>
   )
 }
 
 function App() {
   return (
-    <AuthProvider>
-      <RelayProvider>
-        <NIP11Provider>
-          <AppContent />
-        </NIP11Provider>
-      </RelayProvider>
-    </AuthProvider>
+    <LogProvider>
+      <AuthProvider>
+        <RelayProvider>
+          <NIP11Provider>
+            <AppContent />
+          </NIP11Provider>
+        </RelayProvider>
+      </AuthProvider>
+    </LogProvider>
   )
 }
 

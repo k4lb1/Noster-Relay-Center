@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react'
 import { createRelayConnection, sendEvent, requestCount as relayRequestCount, subscribeToRecentEvents, measureRoundTrip } from '../services/relay'
 import type { Event } from 'nostr-tools'
+import { useLog } from './LogContext'
 
 const PING_INTERVAL_MS = 1000
 const SAMPLES_LAST_10_MIN = 600
@@ -26,6 +27,7 @@ interface RelayContextType extends UseRelayReturn {}
 const RelayContext = createContext<RelayContextType | undefined>(undefined)
 
 export function RelayProvider({ children }: { children: React.ReactNode }) {
+  const { addLog } = useLog()
   const [url, setUrl] = useState<string | null>(null)
   const [isConnected, setIsConnected] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -64,14 +66,17 @@ export function RelayProvider({ children }: { children: React.ReactNode }) {
       }
       ws.onerror = () => {
         setError('WebSocket error')
+        addLog('error', 'WebSocket error', 'Relay')
         setIsConnected(false)
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Connection error')
+      const message = err instanceof Error ? err.message : 'Connection error'
+      setError(message)
+      addLog('error', message, 'Relay')
       setIsConnected(false)
       wsRef.current = null
     }
-  }, [])
+  }, [addLog])
 
   const disconnect = useCallback(() => {
     if (wsRef.current) {
