@@ -138,4 +138,4 @@ The app sends signed Nostr events (e.g. Kind 25000) to the relay. You can add mo
 
 ## License
 
-Use and adapt as you like. No warranty.
+MIT – see [LICENSE](LICENSE).
