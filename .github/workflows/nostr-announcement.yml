@@ -1,0 +1,31 @@
+name: Publish Nostr App Event
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install nak
+        run: |
+          curl -sL https://github.com/fiatjaf/nak/releases/latest/download/nak-linux-amd64 -o nak
+          chmod +x nak
+          sudo mv nak /usr/local/bin/
+
+      - name: Broadcast NIP-89 Event
+        env:
+          NAK_SEC: ${{ secrets.NOSTR_SEC }}
+        run: |
+          CREATED_AT=$(date +%s)
+          echo "{
+            \"kind\": 31990,
+            \"content\": \"{\\\"name\\\":\\\"Nostr Relay Center\\\",\\\"about\\\":\\\"Dashboard to manage and analyze Nostr relays.\\\",\\\"picture\\\":\\\"https://k4lb.github.io/Nostr-Relay-Center/public/icon.svg\\\",\\\"website\\\":\\\"https://k4lb.github.io/Nostr-Relay-Center/\\\"}\",
+            \"tags\": [
+              [\"d\", \"nostr-relay-center\"],
+              [\"k\", \"31990\"]
+            ],
+            \"created_at\": $CREATED_AT
+          }" | nak event wss://relay.damus.io wss://nos.lol wss://purplepag.es
