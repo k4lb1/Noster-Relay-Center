@@ -114,8 +114,8 @@ src/
 ## PWA
 
 - **Manifest:** `public/manifest.json` (name “Nostr Relay Center”, short_name, icons, display standalone, theme_color).
-- **Icons:** Add `public/icons/icon-192x192.png` and `icon-512x512.png` for “Add to Home Screen”.
-- No service worker included; add one (e.g. vite-plugin-pwa) if you want offline caching.
+- **Offline:** [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) is configured with a **GenerateSW** strategy and `registerType: 'autoUpdate'`, so the app is a real offline-capable PWA: the service worker precaches the built assets and updates automatically when you deploy a new version.
+- **Icons:** `public/icon.svg` is used for favicon and app icon; add `public/icons/icon-192x192.png` and `icon-512x512.png` if you need PNG icons for older “Add to Home Screen” behaviour on some devices.
 
 ## Security
 
@@ -126,6 +126,7 @@ src/
 ## Relay compatibility
 
 - **NIP-11** and **WebSocket** are standard; the PWA works with any Nostr relay that exposes `/.well-known/nostr.json` and accepts Nostr protocol messages.
+- **CORS:** When the app runs in the browser (e.g. on localhost or a deployed site) and connects to a relay on another origin (e.g. a local relay at `ws://127.0.0.1:8080`), the relay or its reverse proxy must allow the app’s origin in CORS and (for WebSockets) permit the connection; otherwise the browser will block the request. This is one of the most common issues when using web-based relay tools with self-hosted or local relays.
 - **NIP-45 (COUNT):** Event count for Kind 1 is shown when the relay supports NIP-45 COUNT. If the relay does not support it, “—” and a note are shown.
 - **Whitelist UI:** The PWA uses NIP-11 `software` to decide whether to show the Kind 25000 whitelist UI. Relays that report `nostr-rs-relay` get “No NIP 25000 support”; others (strfry, nostream, custom) get the whitelist UI.
 - **nostr-rs-relay:** Does **not** use Kind 25000 for access control. Whitelist is configured in `config.toml` under `[authorization]` → `pubkey_whitelist` (hex pubkeys).
