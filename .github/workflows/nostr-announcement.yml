@@ -11,7 +11,8 @@ jobs:
     steps:
       - name: Install nak
         run: |
-          curl -sL https://github.com/fiatjaf/nak/releases/latest/download/nak-linux-amd64 -o nak
+          NAK_URL=$(curl -sL https://api.github.com/repos/fiatjaf/nak/releases/latest | jq -r '.assets[] | select(.name | endswith("linux-amd64")) | .browser_download_url')
+          curl -sL "$NAK_URL" -o nak
           chmod +x nak
           sudo mv nak /usr/local/bin/
 
